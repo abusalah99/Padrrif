@@ -13,5 +13,4 @@ public class UserRegistrationDto
     public DateTime BirthDate { get; set; }
     public string Password { get; set; } = null!;
     public IFormFile Image { get; set; } = null!;
-    public RoleEnum Role { get; set; }
 }
