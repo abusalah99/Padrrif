@@ -1,4 +1,6 @@
-﻿namespace Padrrif;
+﻿using static System.Net.Mime.MediaTypeNames;
+
+namespace Padrrif;
 
 public class JwtBearerOptionsSetup : IPostConfigureOptions<JwtBearerOptions>
 {
@@ -23,10 +25,14 @@ public class JwtBearerOptionsSetup : IPostConfigureOptions<JwtBearerOptions>
         {
             OnMessageReceived = ctx =>
             {
-                ctx.Token = ctx.HttpContext.Request.Cookies["AccessToken"];
-
+                var accessToken = ctx.HttpContext.Request.Query["access_token"];
+                if (!string.IsNullOrEmpty(accessToken))
+                {
+                    ctx.Token = accessToken;
+                }
                 return Task.CompletedTask;
             }
+
         };
     }
 }

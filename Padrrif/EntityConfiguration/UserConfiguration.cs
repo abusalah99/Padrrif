@@ -38,5 +38,9 @@ public class UserConfiguration : BaseEntityConfiguration<User>
 
         builder.Property(e => e.ImagePath)
                .IsRequired();
+
+        builder.HasMany(e => e.Notifactions)
+               .WithOne(e => e.User)
+               .HasForeignKey(e => e.UserId);
     }
 }

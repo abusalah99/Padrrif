@@ -1,24 +1,19 @@
 ﻿namespace Padrrif;
 
-public interface IRepository<TEntity, TIdType>
+public interface IRepository<TEntity>
 {
     Task<bool> Add(TEntity entity);
-    Task<List<TEntity>> GetList(Func<IQueryable<TEntity>, IQueryable<TEntity>>? additionalQuery = null,
-        Func<TEntity, bool>? isDeleteSelector = null, bool notDeletedFlagValue = false);
-    Task<TEntity?> GetSingleEntityWithSomeCondiition(Func<IQueryable<TEntity>, IQueryable<TEntity>> additionalQuery,
-        Func<TEntity, bool>? isDeleteSelector = null, bool notDeletedFlagValue = false);
-    Task<TEntity?> GetById(Func<TEntity, TIdType> idSelector, TIdType id, Func<IQueryable<TEntity>, IQueryable<TEntity>>? additionalQuery = null,
-        Func<TEntity, bool>? isDeleteSelector = null, bool notDeletedFlagValue = false);
-    Task<int> GetTableRecordsCount(Func<IQueryable<TEntity>, IQueryable<TEntity>>? additionalQuery = null,
-        Func<TEntity, bool>? isDeleteSelector = null, bool notDeletedFlagValue = false);
+    Task<List<TEntity>> GetList(Func<IQueryable<TEntity>, IQueryable<TEntity>>? additionalQuery = null);
+    Task<TEntity?> GetSingleEntityWithSomeCondiition(Func<IQueryable<TEntity>, IQueryable<TEntity>> additionalQuery);
+    Task<TEntity?> GetById(Guid id, Func<IQueryable<TEntity>, IQueryable<TEntity>>? additionalQuery = null);
+    Task<int> GetTableRecordsCount(Func<IQueryable<TEntity>, IQueryable<TEntity>>? additionalQuery = null);
     Task<List<TResult>> SelectListOfProperty<TResult>(Func<TEntity, TResult> propertySelector,
-        Func<IQueryable<TEntity>, IQueryable<TEntity>>? additionalQuery = null, Func<TEntity, bool>? isDeleteSelector = null, bool notDeletedFlagValue = false);
+        Func<IQueryable<TEntity>, IQueryable<TEntity>>? additionalQuery = null);
     Task<TResult?> GetSinglePropertyValue<TResult>(Func<TEntity, TResult> propertySelector,
-        Func<IQueryable<TEntity>, IQueryable<TEntity>>? additionalQuery = null, Func<TEntity, bool>? isDeleteSelector = null, bool notDeletedFlagValue = false);
-    Task<bool> HardUpdateEntity(TEntity entity, Func<TEntity, bool>? isDeleteSelector = null, bool notDeletedFlagValue = false);
-    Task<bool> Update(Func<TEntity, TIdType> idSelector, TEntity entity, Func<TEntity, bool>? isDeleteSelector = null, bool notDeletedFlagValue = false);
-    Task<bool> Remove(Func<TEntity, TIdType> idSelector, TIdType id, Func<TEntity, bool>? isDeleteSelector = null, bool notDeletedFlagValue = false);
-    Task<bool> Remove(Func<TEntity, TIdType> idSelector, TEntity entity,
-            Func<TEntity, bool>? isDeleteSelector = null, bool notDeletedFlagValue = false);
+        Func<IQueryable<TEntity>, IQueryable<TEntity>>? additionalQuery = null);
+    Task<bool> HardUpdateEntity(TEntity entity);
+    Task<bool> Update(TEntity entity);
+    Task<bool> Remove(Guid id);
+    Task<bool> Remove(TEntity entity);
     Task<IDbContextTransaction> GetTransaction();
 }

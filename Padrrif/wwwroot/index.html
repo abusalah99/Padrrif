@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignalR Testing Page</title>
+    <!-- Include SignalR JavaScript library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.7/signalr.min.js"></script>
+</head>
+<body>
+    <h1>SignalR Testing Page</h1>
+
+    <h2 id="receivedMessage"></h2> <!-- Display received message here -->
+
+    <script>
+        // Create a connection to the SignalR hub
+        const authToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJZCI6IjBjYWE5MzA4LWQxMmItNDFjOC05ZmQ2LTJmZjE3MWFkZmU0YiIsIm5hbWUiOiJhaG1lZCBzYWxhaCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkVtcG9seWVlIiwiR292ZXJub3JhdGVJZCI6ImFjNTIzYjE1LTNmYTMtNGM4NS1hODdkLWFhNTA5ZTc2MzU5OCIsImV4cCI6MTc0NjgxMjk3NX0.g9kWqehXEE__hJafsOT7Z6Z6sLtuEHvRX2hVCOKGNKw"
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("https://localhost:7195/notification-Hub", {
+                accessTokenFactory: () => authToken
+            })
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
+
+        connection.on("ReciveNotification", (message) => {
+            document.getElementById("receivedMessage").innerText = message;
+        });
+
+        connection.start()
+            .then(() => {
+                console.log("Connection established.");
+            })
+            .catch((error) => {
+                console.error("Error establishing connection:", error);
+            });
+    </script>
+</body>
+</html>

@@ -12,6 +12,7 @@ public class JwtProvider : IJwtProvider
             new("Id", user.Id.ToString()),
             new(JwtRegisteredClaimNames.Name, $"{user.Name}"),
             new(ClaimTypes.Role, user.Role.ToString()),
+            new("GovernorateId", user.GovernorateId.ToString())
         };
  
        string token = TokenGenrator(

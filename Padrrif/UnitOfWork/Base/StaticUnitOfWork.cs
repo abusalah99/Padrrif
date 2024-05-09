@@ -38,4 +38,15 @@ public static class StaticUnitOfWork
 
         return null;
     }
+    public static Guid GetUserId(this IHttpContextAccessor context)
+    {
+        var httpContext = context.HttpContext;
+
+        if (httpContext == null)
+            throw new InvalidOperationException("This operation requires an active HTTP context.");
+
+        var claimsId = httpContext.User.FindFirst("Id") ?? new("Id", Guid.Empty.ToString());
+
+        return new(claimsId.Value);
+    }
 }

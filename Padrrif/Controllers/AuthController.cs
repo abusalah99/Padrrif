@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-namespace Padrrif.Controllers
+﻿namespace Padrrif.Controllers
 {
     [Route("api")]
     [ApiController]
@@ -9,14 +7,6 @@ namespace Padrrif.Controllers
         private readonly IAuthUnitOfWork _unitOfWork;
 
         public AuthController(IAuthUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
-
-
-        [Authorize]
-        [HttpGet]
-        public IActionResult Test()
-        {
-            return Ok("test");
-        }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto request)
@@ -28,7 +18,8 @@ namespace Padrrif.Controllers
 
             return BadRequest("Wrong credentials");
         }
-        [HttpPost("register/farmer")]
+
+        [HttpPost("register")]
         public async Task<IActionResult> RegisterAsFarmer([FromForm] UserRegistrationDto request)
         {
             User user = await _unitOfWork.MapFromUserRegistrationDtoToUser(request);
@@ -38,16 +29,23 @@ namespace Padrrif.Controllers
             return Ok(tokenDto);
 
         }
-        [HttpPost("register/empolyee")]
-        public async Task<IActionResult> RegisterAsEmpolyee([FromForm] UserRegistrationDto request)
+
+        [Authorize(Roles = nameof(RoleEnum.Admin))]
+        [HttpPost("create-employee")]
+        public async Task<IActionResult> CreateEmployee([FromForm] UserRegistrationDto request)
         {
             User user = await _unitOfWork.MapFromUserRegistrationDtoToUser(request);
 
-            TokenDto tokenDto = await _unitOfWork.RegisterAsEmpolyee(user);
+            try
+            {
+                await _unitOfWork.RegisterAsEmpolyee(user);
 
-            return Ok(tokenDto);
-
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
-
     }
 }
